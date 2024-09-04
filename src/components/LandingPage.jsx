@@ -1,16 +1,10 @@
-import { Link } from "react-router-dom";
-
-function LandingPage({ gameMode, gameModes, setGameMode, setHasGameStarted }) {
-  let title = "";
-  switch (gameMode) {
-    case "classic":
-      title = "Guess that Character!";
-      break;
-    case "hard":
-      title = "Guess that Actor!";
-      break;
-  }
-
+function LandingPage({
+  gameMode,
+  gameModes,
+  setGameMode,
+  setHasGameStarted,
+  gameTitle,
+}) {
   function handleChange(e) {
     setGameMode(e.target.value);
   }
@@ -36,7 +30,7 @@ function LandingPage({ gameMode, gameModes, setGameMode, setHasGameStarted }) {
         }}
       >
         <section>
-          <h1 className="title has-text-white">{title}</h1>
+          <h1 className="title has-text-white">{gameTitle}</h1>
         </section>
         <button className="button" onClick={handleClick}>
           Start Game

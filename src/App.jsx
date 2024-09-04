@@ -15,6 +15,16 @@ function App() {
   const [gameMode, setGameMode] = useState(gameModes[0].value);
   const [hasGameStarted, setHasGameStarted] = useState(false);
 
+  let gameTitle = "";
+  switch (gameMode) {
+    case "classic":
+      gameTitle = "Guess that Character!";
+      break;
+    case "hard":
+      gameTitle = "Guess that Actor!";
+      break;
+  }
+
   return (
     <>
       {!hasGameStarted ? (
@@ -23,9 +33,10 @@ function App() {
           gameModes={gameModes}
           setGameMode={setGameMode}
           setHasGameStarted={setHasGameStarted}
+          gameTitle={gameTitle}
         />
       ) : (
-        <StartGame gameMode={gameMode} />
+        <StartGame gameMode={gameMode} gameTitle={gameTitle} />
       )}
     </>
   );
