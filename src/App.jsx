@@ -28,28 +28,44 @@ function App() {
 
   return (
     <>
-      <nav>LeaderBoard</nav>
-      <section>
-        <h1>{title}</h1>
-      </section>
-      <button>Start Game</button>
-      <section>
-        <label htmlFor="game-mode">Game mode: </label>
-        <select
-          onChange={handleChange}
-          name="game-mode"
-          id="game-mode"
-          value={gameMode}
-        >
-          {gameModes.map((gameMode, index) => {
-            return (
-              <option key={index} value={gameMode.value}>
-                {gameMode.label}
-              </option>
-            );
-          })}
-        </select>
-      </section>
+      <nav className="navbar has-background-info">
+        <div className="navbar-menu">
+          <a className="navbar-item">Leaderboard</a>
+        </div>
+      </nav>
+      <main
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "space-around",
+          height: "50vh",
+        }}
+      >
+        <section>
+          <h1 className="title">{title}</h1>
+        </section>
+        <button className="button">Start Game</button>
+        <section>
+          <div className="select">
+            <select
+              onChange={handleChange}
+              name="game-mode"
+              id="game-mode"
+              value={gameMode}
+            >
+              <option disabled>Game Mode:</option>
+              {gameModes.map((gameMode, index) => {
+                return (
+                  <option key={index} value={gameMode.value}>
+                    {gameMode.label}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+        </section>
+      </main>
     </>
   );
 }
