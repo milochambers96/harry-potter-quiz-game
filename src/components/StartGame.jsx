@@ -1,28 +1,29 @@
 import { useEffect, useState } from "react";
 
+const intialTimer = 5;
+let currentTimer = intialTimer;
+let currentQuestionNumber = 1;
+
 function StartGame({ gameMode, gameTitle }) {
   const [characters, setCharacters] = useState([]);
-  //   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const [questionNumber, setQuestionNumber] = useState(currentQuestionNumber);
+  const [currentCharacter, setCurrentCharacter] = useState({});
+  const [timer, setTimer] = useState(currentTimer);
   const generatedNumbers = [];
 
   async function fetchCharacters() {
     const resp = await fetch("https://hp-api.herokuapp.com/api/characters");
     const data = await resp.json();
-    generateRandomCharactersIdx(data, data.length, 10);
+    generateRandomCharactersIdx(data, data.length, 3);
     const selectedCharacters = generatedNumbers.map((index) => data[index]);
     setCharacters(selectedCharacters);
-    // const charactersData = structuredClone(characters);
-    // setCharacters(charactersData);
-    // console.log(charactersData);
-    console.log(generatedNumbers);
+    setCurrentCharacter(selectedCharacters[0]);
+    console.log("Current chracter", selectedCharacters[0]);
   }
 
   useEffect(() => {
     fetchCharacters();
   }, []);
-
-  console.log(characters);
 
   function generateRandomCharactersIdx(data, dataLength, numberOfCharacters) {
     if (generatedNumbers.length === numberOfCharacters) return;
@@ -35,14 +36,34 @@ function StartGame({ gameMode, gameTitle }) {
     generateRandomCharactersIdx(data, dataLength, numberOfCharacters);
   }
 
-  //   const currentCharacter = characters[currentIndex];
+  if (
+    characters.length &&
+    currentQuestionNumber <= characters.length &&
+    currentTimer === intialTimer
+  ) {
+    const intervalID = setInterval(() => {
+      currentTimer--;
+      setTimer(currentTimer);
+      if (currentTimer === 0) {
+        clearInterval(intervalID);
+        currentTimer = intialTimer;
+        setTimer(currentTimer);
+        console.log("Current Character now", characters[currentQuestionNumber]);
 
+        setCurrentCharacter(characters[currentQuestionNumber]);
+        currentQuestionNumber++;
+        setQuestionNumber(currentQuestionNumber);
+      }
+    }, 1000);
+  }
+
+  //   const currentCharacter = characters[currentIndex];
   return (
     <>
       <section>
         <h1>{gameTitle}</h1>
-        <h2>Question</h2>
-        <h3>Timer</h3>
+        <h2>Question: {questionNumber}</h2>
+        <h3>Timer: {timer}</h3>
         <div className="image-container">
           {/* <img src={currentCharacter.image}></img> */}
         </div>
