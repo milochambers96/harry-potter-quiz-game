@@ -18,7 +18,6 @@ function StartGame({ gameMode, gameTitle }) {
     const selectedCharacters = generatedNumbers.map((index) => data[index]);
     setCharacters(selectedCharacters);
     setCurrentCharacter(selectedCharacters[0]);
-    console.log("Current chracter", selectedCharacters[0]);
   }
 
   useEffect(() => {
@@ -47,17 +46,17 @@ function StartGame({ gameMode, gameTitle }) {
       if (currentTimer === 0) {
         clearInterval(intervalID);
         currentTimer = intialTimer;
-        setTimer(currentTimer);
-        console.log("Current Character now", characters[currentQuestionNumber]);
-
-        setCurrentCharacter(characters[currentQuestionNumber]);
         currentQuestionNumber++;
-        setQuestionNumber(currentQuestionNumber);
+
+        if (currentQuestionNumber <= characters.length) {
+          setCurrentCharacter(characters[currentQuestionNumber - 1]);
+          setQuestionNumber(currentQuestionNumber);
+          setTimer(currentTimer);
+        }
       }
     }, 1000);
   }
 
-  //   const currentCharacter = characters[currentIndex];
   return (
     <>
       <section>
@@ -65,7 +64,7 @@ function StartGame({ gameMode, gameTitle }) {
         <h2>Question: {questionNumber}</h2>
         <h3>Timer: {timer}</h3>
         <div className="image-container">
-          {/* <img src={currentCharacter.image}></img> */}
+          <img src={currentCharacter.image}></img>
         </div>
         <div className="choices-container">
           <button className="button">1</button>
