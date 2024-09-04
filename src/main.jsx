@@ -5,10 +5,7 @@ import App from "./App.jsx";
 import "./index.css";
 import StartGame from "./components/StartGame.jsx";
 
-const router = createBrowserRouter([
-  { path: "/", element: <App /> },
-  { path: "/start-game", element: <StartGame /> },
-]);
+const router = createBrowserRouter([{ path: "/", element: <App /> }]);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

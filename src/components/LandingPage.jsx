@@ -1,18 +1,6 @@
-import { useState } from "react";
-// import StartGame from "./components/StartGame";
 import { Link } from "react-router-dom";
 
-function LandingPage() {
-  const gameModes = [
-    {
-      label: "Classic",
-      value: "classic",
-    },
-    { label: "Hard", value: "hard" },
-  ];
-
-  const [gameMode, setGameMode] = useState(gameModes[0].value);
-
+function LandingPage({ gameMode, gameModes, setGameMode, setHasGameStarted }) {
   let title = "";
   switch (gameMode) {
     case "classic":
@@ -25,6 +13,10 @@ function LandingPage() {
 
   function handleChange(e) {
     setGameMode(e.target.value);
+  }
+
+  function handleClick() {
+    setHasGameStarted(true);
   }
 
   return (
@@ -46,9 +38,9 @@ function LandingPage() {
         <section>
           <h1 className="title has-text-white">{title}</h1>
         </section>
-        <Link className="button" to="/start-game">
+        <button className="button" onClick={handleClick}>
           Start Game
-        </Link>
+        </button>
         <section>
           <div className="select">
             <select
