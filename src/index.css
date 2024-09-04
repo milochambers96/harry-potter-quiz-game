@@ -4,4 +4,7 @@ body {
   font-style: normal;
   margin: 0;
   box-sizing: border-box;
+  height: 100vh;
+  background: no-repeat url(./assets/hogwards-background.png);
+  background-size: cover;
 }

@@ -43,7 +43,7 @@ function App() {
         }}
       >
         <section>
-          <h1 className="title">{title}</h1>
+          <h1 className="title has-text-white">{title}</h1>
         </section>
         <button className="button">Start Game</button>
         <section>
