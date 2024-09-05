@@ -22,6 +22,8 @@ function App() {
     totalQuestions: null,
   });
 
+  const [playerName, setPlayerName] = useState("");
+
   let gameTitle = "";
   switch (gameMode) {
     case "classic":
@@ -42,6 +44,7 @@ function App() {
           setGameMode={setGameMode}
           setHasGameStarted={setHasGameStarted}
           setHasGameBeenPlayed={setHasGameBeenPlayed}
+          playerName={playerName}
         />
       );
     } else if (!hasGameStarted) {
@@ -52,6 +55,8 @@ function App() {
           setGameMode={setGameMode}
           setHasGameStarted={setHasGameStarted}
           gameTitle={gameTitle}
+          playerName={playerName}
+          setPlayerName={setPlayerName}
         />
       );
     } else if (hasGameStarted) {
@@ -61,6 +66,7 @@ function App() {
           gameTitle={gameTitle}
           setGameScore={setGameScore}
           setHasGameBeenPlayed={setHasGameBeenPlayed}
+          playerName={playerName}
         />
       );
     }

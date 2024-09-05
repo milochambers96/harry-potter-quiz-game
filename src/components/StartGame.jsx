@@ -5,6 +5,7 @@ function StartGame({
   gameTitle,
   setGameScore,
   setHasGameBeenPlayed,
+  playerName,
 }) {
   const initialTimerRef = useRef(5);
   const currentTimerRef = useRef(initialTimerRef.current);
@@ -26,7 +27,7 @@ function StartGame({
     const resp = await fetch("https://hp-api.herokuapp.com/api/characters");
     const data = await resp.json();
     responseData.current = data;
-    generateRandomCharactersIdx(data, data.length, 10);
+    generateRandomCharactersIdx(data, data.length, 5);
     const selectedCharacters = generatedNumbers.map((index) => data[index]);
     const correctAnswer = data[generatedNumbers[0]].name;
 
@@ -137,6 +138,9 @@ function StartGame({
         <h1 className="title is-2 has-text-white has-text-centered">
           {gameTitle}
         </h1>
+        <h4 className="is-size-4 has-text-white has-text-centered">
+          Player Name: {playerName}
+        </h4>
         <div
           className="block"
           style={{

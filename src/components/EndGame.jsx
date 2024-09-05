@@ -8,6 +8,7 @@ function EndGame({
   gameModes,
   setGameMode,
   setHasGameBeenPlayed,
+  playerName,
 }) {
   function handleClick() {
     setHasGameBeenPlayed(false);
@@ -18,7 +19,7 @@ function EndGame({
   }, []);
 
   function setHighScore() {
-    const currentScore = { name: "test4", score: gameScore.score };
+    const currentScore = { name: playerName, score: gameScore.score };
     let highScores = JSON.parse(localStorage.getItem(gameMode));
     if (highScores && highScores.length < 5) {
       highScores.push(currentScore);
