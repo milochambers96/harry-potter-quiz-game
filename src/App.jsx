@@ -16,8 +16,11 @@ function App() {
 
   const [gameMode, setGameMode] = useState(gameModes[0].value);
   const [hasGameStarted, setHasGameStarted] = useState(false);
-  const [hasGameBeenPlayed, setHasGameBeenPlayed] = useState(true);
-  const [gameScore, setGameScore] = useState(0);
+  const [hasGameBeenPlayed, setHasGameBeenPlayed] = useState(false);
+  const [gameScore, setGameScore] = useState({
+    score: null,
+    totalQuestions: null,
+  });
 
   let gameTitle = "";
   switch (gameMode) {

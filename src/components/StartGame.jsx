@@ -26,7 +26,7 @@ function StartGame({
     const resp = await fetch("https://hp-api.herokuapp.com/api/characters");
     const data = await resp.json();
     responseData.current = data;
-    generateRandomCharactersIdx(data, data.length, 6);
+    generateRandomCharactersIdx(data, data.length, 10);
     const selectedCharacters = generatedNumbers.map((index) => data[index]);
     const correctAnswer = data[generatedNumbers[0]].name;
 
@@ -85,7 +85,10 @@ function StartGame({
         clearInterval(intervalID);
         currentTimerRef.current = initialTimerRef.current;
         currentQuestionNumberRef.current++;
-        setGameScore(gamePoints.current);
+        setGameScore({
+          score: gamePoints.current,
+          totalQuestions: characters.length,
+        });
         checkHasGameEnded();
         if (currentQuestionNumberRef.current <= characters.length) {
           setHasMadeChoice(false);
@@ -172,7 +175,7 @@ function StartGame({
                 data-name={choice.name}
                 disabled={hasMadeChoice}
               >
-                {choice.name} - {choice.isCorrectOption && "correct"}
+                {choice.name}
               </button>
             );
           })}
