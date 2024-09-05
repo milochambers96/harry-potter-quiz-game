@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import SelectInput from "./SelectInput";
+import { useEffect } from "react";
 
 function EndGame({
   gameScore,
@@ -8,10 +9,23 @@ function EndGame({
   setGameMode,
   setHasGameBeenPlayed,
 }) {
-  console.log(gameScore);
-
   function handleClick() {
     setHasGameBeenPlayed(false);
+  }
+
+  useEffect(() => {
+    setHighScore();
+  }, []);
+
+  function setHighScore() {
+    const currentScore = { name: "random name", score: gameScore.score };
+    let highScores = JSON.parse(localStorage.getItem(gameMode));
+    if (highScores) {
+      highScores.push(currentScore);
+    } else {
+      highScores = [currentScore];
+    }
+    localStorage.setItem(gameMode, JSON.stringify(highScores));
   }
 
   return (
