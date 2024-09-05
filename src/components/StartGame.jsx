@@ -23,9 +23,9 @@ function StartGame({ gameMode, gameTitle }) {
 
     const options = [
       correctAnswer,
-      data[generatedNumbers[1]].name,
-      data[generatedNumbers[2]].name,
-      data[generatedNumbers[3]].name,
+      data[generateRandomOptionIdx()].name,
+      data[generateRandomOptionIdx()].name,
+      data[generateRandomOptionIdx()].name,
     ];
     const shuffledOptions = shuffleOptions(options);
     setChoices(shuffledOptions);
@@ -47,7 +47,11 @@ function StartGame({ gameMode, gameTitle }) {
     }
     generateRandomCharactersIdx(data, dataLength, numberOfCharacters);
   }
-
+  function generateRandomOptionIdx() {
+    return generatedNumbers[
+      Math.floor(Math.random() * generatedNumbers.length - 1) + 1
+    ];
+  }
   function shuffleOptions(options) {
     for (let i = options.length - 1; i > 0; i--) {
       const rI = Math.floor(Math.random() * (i + 1));
