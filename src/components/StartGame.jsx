@@ -4,6 +4,7 @@ function StartGame({ gameMode, gameTitle }) {
   const initialTimerRef = useRef(5);
   const currentTimerRef = useRef(initialTimerRef.current);
   const currentQuestionNumberRef = useRef(1);
+  const responseData = useRef(null);
   const [characters, setCharacters] = useState([]);
   const [questionNumber, setQuestionNumber] = useState(
     currentQuestionNumberRef.current
@@ -17,18 +18,17 @@ function StartGame({ gameMode, gameTitle }) {
   async function fetchCharacters() {
     const resp = await fetch("https://hp-api.herokuapp.com/api/characters");
     const data = await resp.json();
+    responseData.current = data;
     generateRandomCharactersIdx(data, data.length, 6);
     const selectedCharacters = generatedNumbers.map((index) => data[index]);
     const correctAnswer = data[generatedNumbers[0]].name;
 
-    const options = [
+    const options = generateRandomOptions(
       correctAnswer,
-      data[generateRandomOptionIdx()].name,
-      data[generateRandomOptionIdx()].name,
-      data[generateRandomOptionIdx()].name,
-    ];
-    const shuffledOptions = shuffleOptions(options);
-    setChoices(shuffledOptions);
+      responseData.current,
+      3
+    );
+    setChoices(options);
     setCharacters(selectedCharacters);
     setCurrentCharacter(selectedCharacters[0]);
   }
@@ -47,11 +47,16 @@ function StartGame({ gameMode, gameTitle }) {
     }
     generateRandomCharactersIdx(data, dataLength, numberOfCharacters);
   }
-  function generateRandomOptionIdx() {
-    return generatedNumbers[
-      Math.floor(Math.random() * generatedNumbers.length - 1) + 1
-    ];
+  function generateRandomOptions(correctOption, data, optionLength) {
+    const newOptions = [correctOption];
+    for (let i = optionLength; i > 0; i--) {
+      newOptions.push(
+        data[Math.floor(Math.random() * (data.length - 1)) + 1].name
+      );
+    }
+    return shuffleOptions(newOptions);
   }
+
   function shuffleOptions(options) {
     for (let i = options.length - 1; i > 0; i--) {
       const rI = Math.floor(Math.random() * (i + 1));
@@ -76,6 +81,13 @@ function StartGame({ gameMode, gameTitle }) {
         if (currentQuestionNumberRef.current <= characters.length) {
           setCurrentCharacter(characters[currentQuestionNumberRef.current - 1]);
           setQuestionNumber(currentQuestionNumberRef.current);
+          setChoices(
+            generateRandomOptions(
+              characters[currentQuestionNumberRef.current - 1].name,
+              responseData.current,
+              3
+            )
+          );
           setTimer(currentTimerRef.current);
         }
       }
