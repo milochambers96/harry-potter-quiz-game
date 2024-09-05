@@ -1,7 +1,7 @@
 function DisplayLeaderboard({ title, highScores }) {
   return (
-    <div style={{ padding: "50px" }}>
-      <h3 className="subtitle is-3 has-text-white">{title}</h3>
+    <div style={{ padding: "20px 50px" }}>
+      <h4 className="subtitle is-4 has-text-white">{title}</h4>
       <ol>
         {highScores.length ? (
           highScores.map((score, index) => (

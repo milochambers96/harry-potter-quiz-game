@@ -25,11 +25,16 @@ function Leaderboard() {
     <>
       <NavBar />
       <h1 className="title has-text-white has-text-centered">High Score</h1>
-      <DisplayLeaderboard title="Classic Mode" highScores={classicHighScores} />
-      <DisplayLeaderboard title="Hard Mode" highScores={hardHighScore} />
-      <button className="button has-background-danger" onClick={handleClick}>
-        Reset high scores!
-      </button>
+      <div className="flex-display">
+        <DisplayLeaderboard
+          title="Classic Mode"
+          highScores={classicHighScores}
+        />
+        <DisplayLeaderboard title="Hard Mode" highScores={hardHighScore} />
+        <button className="button has-background-danger" onClick={handleClick}>
+          Reset high scores!
+        </button>
+      </div>
     </>
   );
 }
