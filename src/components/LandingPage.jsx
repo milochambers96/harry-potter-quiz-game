@@ -1,3 +1,5 @@
+import SelectInput from "./SelectInput";
+
 function LandingPage({
   gameMode,
   gameModes,
@@ -5,10 +7,6 @@ function LandingPage({
   setHasGameStarted,
   gameTitle,
 }) {
-  function handleChange(e) {
-    setGameMode(e.target.value);
-  }
-
   function handleClick() {
     setHasGameStarted(true);
   }
@@ -24,25 +22,11 @@ function LandingPage({
         <button className="button" onClick={handleClick}>
           Start Game
         </button>
-        <section>
-          <div className="select">
-            <select
-              onChange={handleChange}
-              name="game-mode"
-              id="game-mode"
-              value={gameMode}
-            >
-              <option disabled>Game Mode:</option>
-              {gameModes.map((gameMode, index) => {
-                return (
-                  <option key={index} value={gameMode.value}>
-                    {gameMode.label}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-        </section>
+        <SelectInput
+          gameMode={gameMode}
+          gameModes={gameModes}
+          setGameMode={setGameMode}
+        />
       </main>
     </>
   );

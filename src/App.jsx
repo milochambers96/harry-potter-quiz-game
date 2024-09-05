@@ -16,7 +16,7 @@ function App() {
 
   const [gameMode, setGameMode] = useState(gameModes[0].value);
   const [hasGameStarted, setHasGameStarted] = useState(false);
-  const [hasGameBeenPlayed, setHasGameBeenPlayed] = useState(false);
+  const [hasGameBeenPlayed, setHasGameBeenPlayed] = useState(true);
   const [gameScore, setGameScore] = useState(0);
 
   let gameTitle = "";
@@ -31,7 +31,16 @@ function App() {
 
   function gamePageToRender() {
     if (hasGameBeenPlayed) {
-      return <EndGame gameScore={gameScore} />;
+      return (
+        <EndGame
+          gameScore={gameScore}
+          gameMode={gameMode}
+          gameModes={gameModes}
+          setGameMode={setGameMode}
+          setHasGameStarted={setHasGameStarted}
+          setHasGameBeenPlayed={setHasGameBeenPlayed}
+        />
+      );
     } else if (!hasGameStarted) {
       return (
         <LandingPage
