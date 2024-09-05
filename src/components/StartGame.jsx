@@ -21,16 +21,29 @@ function StartGame({
 
   const generatedNumbers = [];
 
-  async function fetchCharacters() {
-    const resp = await fetch("https://hp-api.herokuapp.com/api/characters");
-    const data = await resp.json();
-    responseData.current = data;
-    generateRandomCharactersIdx(data, data.length, 5);
-    const selectedCharacters = generatedNumbers.map((index) => data[index]);
+  useEffect(() => {
+    async function fetchCharacters() {
+      const resp = await fetch("https://hp-api.herokuapp.com/api/characters");
+      const data = await resp.json();
+      responseData.current = data;
+      loadGame();
+    }
+    fetchCharacters();
+  }, []);
+
+  function loadGame() {
+    generateRandomCharactersIdx(
+      responseData.current,
+      responseData.current.length,
+      5
+    );
+    const selectedCharacters = generatedNumbers.map(
+      (index) => responseData.current[index]
+    );
     const correctAnswer =
-      gameMode === "hard" && data[generatedNumbers[0]].actor
-        ? data[generatedNumbers[0]].actor
-        : data[generatedNumbers[0]].name;
+      gameMode === "hard" && responseData.current[generatedNumbers[0]].actor
+        ? responseData.current[generatedNumbers[0]].actor
+        : responseData.current[generatedNumbers[0]].name;
 
     const options = generateRandomOptions(
       correctAnswer,
@@ -41,10 +54,6 @@ function StartGame({
     setCharacters(selectedCharacters);
     setCurrentCharacter(selectedCharacters[0]);
   }
-
-  useEffect(() => {
-    fetchCharacters();
-  }, []);
 
   function generateRandomCharactersIdx(data, dataLength, numberOfCharacters) {
     if (generatedNumbers.length === numberOfCharacters) return;
