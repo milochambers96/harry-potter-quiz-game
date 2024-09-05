@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import SelectInput from "./SelectInput";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function EndGame({
   gameScore,
@@ -18,10 +18,24 @@ function EndGame({
   }, []);
 
   function setHighScore() {
-    const currentScore = { name: "random name", score: gameScore.score };
+    const currentScore = { name: "test4", score: gameScore.score };
     let highScores = JSON.parse(localStorage.getItem(gameMode));
-    if (highScores) {
+    if (highScores && highScores.length < 5) {
       highScores.push(currentScore);
+    } else if (highScores.length >= 5) {
+      const lowestScore = highScores.reduce(
+        (min, score) => {
+          min.score = Math.min(min.score, score.score);
+          return min;
+        },
+        { score: Infinity }
+      );
+      if (currentScore.score > lowestScore.score) {
+        const lowestScoreIndex = highScores.findIndex(
+          (highScores) => lowestScore.score === highScores.score
+        );
+        highScores.splice(lowestScoreIndex, 1, currentScore);
+      }
     } else {
       highScores = [currentScore];
     }

@@ -26,7 +26,7 @@ function StartGame({
     const resp = await fetch("https://hp-api.herokuapp.com/api/characters");
     const data = await resp.json();
     responseData.current = data;
-    generateRandomCharactersIdx(data, data.length, 2);
+    generateRandomCharactersIdx(data, data.length, 10);
     const selectedCharacters = generatedNumbers.map((index) => data[index]);
     const correctAnswer = data[generatedNumbers[0]].name;
 
