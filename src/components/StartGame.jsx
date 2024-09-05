@@ -10,13 +10,25 @@ function StartGame({ gameMode, gameTitle }) {
   );
   const [currentCharacter, setCurrentCharacter] = useState({});
   const [timer, setTimer] = useState(currentTimerRef.current);
+  const [choices, setChoices] = useState([]);
+
   const generatedNumbers = [];
 
   async function fetchCharacters() {
     const resp = await fetch("https://hp-api.herokuapp.com/api/characters");
     const data = await resp.json();
-    generateRandomCharactersIdx(data, data.length, 3);
+    generateRandomCharactersIdx(data, data.length, 6);
     const selectedCharacters = generatedNumbers.map((index) => data[index]);
+    const correctAnswer = data[generatedNumbers[0]].name;
+
+    const options = [
+      correctAnswer,
+      data[generatedNumbers[1]].name,
+      data[generatedNumbers[2]].name,
+      data[generatedNumbers[3]].name,
+    ];
+    const shuffledOptions = shuffleOptions(options);
+    setChoices(shuffledOptions);
     setCharacters(selectedCharacters);
     setCurrentCharacter(selectedCharacters[0]);
   }
@@ -34,6 +46,14 @@ function StartGame({ gameMode, gameTitle }) {
       }
     }
     generateRandomCharactersIdx(data, dataLength, numberOfCharacters);
+  }
+
+  function shuffleOptions(options) {
+    for (let i = options.length - 1; i > 0; i--) {
+      const rI = Math.floor(Math.random() * (i + 1));
+      [options[i], options[rI]] = [options[rI], options[i]];
+    }
+    return options;
   }
 
   if (
@@ -101,10 +121,13 @@ function StartGame({ gameMode, gameTitle }) {
           ></img>
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
-          <button className="button">1</button>
-          <button className="button">2</button>
-          <button className="button">3</button>
-          <button className="button">4</button>
+          {choices.map((choice, i) => {
+            return (
+              <button key={i} className="button">
+                {choice}
+              </button>
+            );
+          })}
         </div>
       </section>
     </>
