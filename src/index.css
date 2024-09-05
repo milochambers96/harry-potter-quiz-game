@@ -8,3 +8,11 @@ body {
   background: no-repeat url(./assets/hogwards-background.png);
   background-size: cover;
 }
+
+.flex-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 50vh;
+}

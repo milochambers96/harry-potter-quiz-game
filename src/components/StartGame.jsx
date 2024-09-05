@@ -59,14 +59,39 @@ function StartGame({ gameMode, gameTitle }) {
 
   return (
     <>
-      <section>
-        <h1>{gameTitle}</h1>
-        <h2>Question: {questionNumber}</h2>
-        <h3>Timer: {timer}</h3>
-        <div className="image-container">
-          <img src={currentCharacter.image}></img>
+      <section className="flex-display" style={{ paddingTop: "30px" }}>
+        <h1 className="title is-2 has-text-white has-text-centered">
+          {gameTitle}
+        </h1>
+        <div
+          className="block"
+          style={{
+            display: "flex",
+            width: "100%",
+            justifyContent: "center",
+            gap: "16px",
+          }}
+        >
+          <h2 className="subtitle is-4 has-text-white">
+            Question: {questionNumber} / {characters.length}
+          </h2>
+          <h3
+            className="tag is-medium is-danger has-text-white"
+            style={{ fontWeight: "bold" }}
+          >
+            Timer: {timer}
+          </h3>
         </div>
-        <div className="choices-container">
+        <div style={{ marginBottom: "16px" }}>
+          <img
+            style={{
+              height: "300px",
+              borderRadius: "16px",
+            }}
+            src={currentCharacter.image}
+          ></img>
+        </div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
           <button className="button">1</button>
           <button className="button">2</button>
           <button className="button">3</button>

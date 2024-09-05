@@ -20,17 +20,11 @@ function LandingPage({
           <a className="navbar-item">Leaderboard</a>
         </div>
       </nav>
-      <main
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "space-around",
-          height: "50vh",
-        }}
-      >
+      <main className="flex-display">
         <section>
-          <h1 className="title has-text-white">{gameTitle}</h1>
+          <h1 className="title has-text-white has-text-centered">
+            {gameTitle}
+          </h1>
         </section>
         <button className="button" onClick={handleClick}>
           Start Game
