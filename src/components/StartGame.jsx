@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
-
-const intialTimer = 5;
-let currentTimer = intialTimer;
-let currentQuestionNumber = 1;
+import { useEffect, useState, useRef } from "react";
 
 function StartGame({ gameMode, gameTitle }) {
+  const initialTimerRef = useRef(5);
+  const currentTimerRef = useRef(initialTimerRef.current);
+  const currentQuestionNumberRef = useRef(1);
   const [characters, setCharacters] = useState([]);
-  const [questionNumber, setQuestionNumber] = useState(currentQuestionNumber);
+  const [questionNumber, setQuestionNumber] = useState(
+    currentQuestionNumberRef.current
+  );
   const [currentCharacter, setCurrentCharacter] = useState({});
-  const [timer, setTimer] = useState(currentTimer);
+  const [timer, setTimer] = useState(currentTimerRef.current);
   const generatedNumbers = [];
 
   async function fetchCharacters() {
@@ -37,21 +38,21 @@ function StartGame({ gameMode, gameTitle }) {
 
   if (
     characters.length &&
-    currentQuestionNumber <= characters.length &&
-    currentTimer === intialTimer
+    currentQuestionNumberRef.current <= characters.length &&
+    currentTimerRef.current === initialTimerRef.current
   ) {
     const intervalID = setInterval(() => {
-      currentTimer--;
-      setTimer(currentTimer);
-      if (currentTimer === 0) {
+      currentTimerRef.current--;
+      setTimer(currentTimerRef.current);
+      if (currentTimerRef.current === 0) {
         clearInterval(intervalID);
-        currentTimer = intialTimer;
-        currentQuestionNumber++;
+        currentTimerRef.current = initialTimerRef.current;
+        currentQuestionNumberRef.current++;
 
-        if (currentQuestionNumber <= characters.length) {
-          setCurrentCharacter(characters[currentQuestionNumber - 1]);
-          setQuestionNumber(currentQuestionNumber);
-          setTimer(currentTimer);
+        if (currentQuestionNumberRef.current <= characters.length) {
+          setCurrentCharacter(characters[currentQuestionNumberRef.current - 1]);
+          setQuestionNumber(currentQuestionNumberRef.current);
+          setTimer(currentTimerRef.current);
         }
       }
     }, 1000);
@@ -60,6 +61,14 @@ function StartGame({ gameMode, gameTitle }) {
   return (
     <>
       <section className="flex-display" style={{ paddingTop: "30px" }}>
+        <h2
+          className="subtitle is-3 has-text-white has-text-centered"
+          style={{
+            marginBottom: "8px",
+          }}
+        >
+          Game Mode: {gameMode}
+        </h2>
         <h1 className="title is-2 has-text-white has-text-centered">
           {gameTitle}
         </h1>
