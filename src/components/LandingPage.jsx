@@ -26,16 +26,28 @@ function LandingPage({
             {gameTitle}
           </h1>
         </section>
-        <form className="field" onSubmit={handleSubmit}>
-          <input
-            className="input"
-            type="text"
-            placeholder="Enter your name"
-            required
-            value={playerName}
-            onChange={handleChange}
-          ></input>
-          <button className="button">Start Game</button>
+        <form
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "10px",
+          }}
+          onSubmit={handleSubmit}
+        >
+          <div className="control">
+            <input
+              className="input is-medium"
+              type="text"
+              placeholder="Enter your name"
+              required
+              value={playerName}
+              onChange={handleChange}
+            ></input>
+          </div>
+          <div className="control">
+            <button className="button">Start Game</button>
+          </div>
         </form>
 
         <SelectInput
