@@ -2,6 +2,7 @@ import "./App.css";
 import { useState } from "react";
 import LandingPage from "./components/LandingPage";
 import StartGame from "./components/StartGame";
+import NavBar from "./components/Navbar";
 
 function App() {
   const gameModes = [
@@ -27,6 +28,7 @@ function App() {
 
   return (
     <>
+      <NavBar />
       {!hasGameStarted ? (
         <LandingPage
           gameMode={gameMode}

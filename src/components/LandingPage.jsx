@@ -15,11 +15,6 @@ function LandingPage({
 
   return (
     <>
-      <nav className="navbar has-background-info">
-        <div className="navbar-menu is-active" id="navbarItems">
-          <a className="navbar-item">Leaderboard</a>
-        </div>
-      </nav>
       <main className="flex-display">
         <section>
           <h1 className="title has-text-white has-text-centered">
