@@ -13,6 +13,7 @@ function StartGame({ gameMode, gameTitle, setGameScore }) {
   const [currentCharacter, setCurrentCharacter] = useState({});
   const [timer, setTimer] = useState(currentTimerRef.current);
   const [choices, setChoices] = useState([{}]);
+  const [hasMadeChoice, setHasMadeChoice] = useState(false);
 
   const generatedNumbers = [];
 
@@ -81,6 +82,7 @@ function StartGame({ gameMode, gameTitle, setGameScore }) {
         currentQuestionNumberRef.current++;
         setGameScore(gamePoints.current);
         if (currentQuestionNumberRef.current <= characters.length) {
+          setHasMadeChoice(false);
           setCurrentCharacter(characters[currentQuestionNumberRef.current - 1]);
           setQuestionNumber(currentQuestionNumberRef.current);
           setChoices(
@@ -97,6 +99,7 @@ function StartGame({ gameMode, gameTitle, setGameScore }) {
   }
 
   function handleClick(e) {
+    setHasMadeChoice(true);
     const isRightChoice = choices.find((choice) => {
       return choice.name === e.target.dataset.name;
     });
@@ -155,6 +158,7 @@ function StartGame({ gameMode, gameTitle, setGameScore }) {
                 className="button"
                 onClick={handleClick}
                 data-name={choice.name}
+                disabled={hasMadeChoice}
               >
                 {choice.name} - {choice.isCorrectOption && "correct"}
               </button>
