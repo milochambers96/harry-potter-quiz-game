@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 
 function StartGame({
   gameMode,
@@ -7,17 +7,15 @@ function StartGame({
   setHasGameBeenPlayed,
   playerName,
 }) {
-  const initialTimerRef = useRef(5);
-  const currentTimerRef = useRef(initialTimerRef.current);
-  const currentQuestionNumberRef = useRef(1);
   const responseData = useRef(null);
   const gamePoints = useRef(0);
+  const intervalIDRef = useRef(null);
+
+  const initialTimer = 5;
   const [characters, setCharacters] = useState([]);
-  const [questionNumber, setQuestionNumber] = useState(
-    currentQuestionNumberRef.current
-  );
+  const [questionNumber, setQuestionNumber] = useState(1);
   const [currentCharacter, setCurrentCharacter] = useState({});
-  const [timer, setTimer] = useState(currentTimerRef.current);
+  const [timer, setTimer] = useState(initialTimer);
   const [choices, setChoices] = useState([{}]);
   const [hasMadeChoice, setHasMadeChoice] = useState(false);
 
@@ -58,6 +56,7 @@ function StartGame({
     }
     generateRandomCharactersIdx(data, dataLength, numberOfCharacters);
   }
+
   function generateRandomOptions(correctOption, data, optionLength) {
     const newOptions = [{ name: correctOption, isCorrectOption: true }];
     for (let i = optionLength; i > 0; i--) {
@@ -82,39 +81,43 @@ function StartGame({
     return options;
   }
 
-  if (
-    characters.length &&
-    currentQuestionNumberRef.current <= characters.length &&
-    currentTimerRef.current === initialTimerRef.current
-  ) {
-    const intervalID = setInterval(() => {
-      currentTimerRef.current--;
-      setTimer(currentTimerRef.current);
-      if (currentTimerRef.current === 0) {
-        clearInterval(intervalID);
-        currentTimerRef.current = initialTimerRef.current;
-        currentQuestionNumberRef.current++;
+  useEffect(() => {
+    intervalIDRef.current = setInterval(() => {
+      setTimer((timer) => timer - 1);
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalIDRef.current);
+    };
+  }, [currentCharacter]);
+
+  useEffect(() => {
+    if (timer === 0) {
+      clearInterval(intervalIDRef.current);
+      if (questionNumber === characters.length) {
         setGameScore({
           score: gamePoints.current,
           totalQuestions: characters.length,
         });
-        checkHasGameEnded();
-        if (currentQuestionNumberRef.current <= characters.length) {
-          setHasMadeChoice(false);
-          setCurrentCharacter(characters[currentQuestionNumberRef.current - 1]);
-          setQuestionNumber(currentQuestionNumberRef.current);
-          const correctCharacterName =
-            gameMode === "hard" &&
-            characters[currentQuestionNumberRef.current - 1].actor
-              ? characters[currentQuestionNumberRef.current - 1].actor
-              : characters[currentQuestionNumberRef.current - 1].name;
-          setChoices(
-            generateRandomOptions(correctCharacterName, responseData.current, 3)
-          );
-          setTimer(currentTimerRef.current);
-        }
+        setHasGameBeenPlayed(true);
+      } else {
+        setNextQuestion();
       }
-    }, 1000);
+    }
+  }, [timer]);
+
+  function setNextQuestion() {
+    setTimer(initialTimer);
+    setQuestionNumber((questionNumber) => questionNumber + 1);
+    setCurrentCharacter(characters[questionNumber]);
+    setHasMadeChoice(false);
+    const correctCharacterName =
+      gameMode === "hard" && characters[questionNumber].actor
+        ? characters[questionNumber].actor
+        : characters[questionNumber].name;
+    setChoices(
+      generateRandomOptions(correctCharacterName, responseData.current, 3)
+    );
   }
 
   function handleClick(e) {
@@ -124,12 +127,6 @@ function StartGame({
     });
     if (isRightChoice.isCorrectOption) {
       gamePoints.current++;
-    }
-  }
-
-  function checkHasGameEnded() {
-    if (questionNumber === characters.length) {
-      setHasGameBeenPlayed(true);
     }
   }
 
