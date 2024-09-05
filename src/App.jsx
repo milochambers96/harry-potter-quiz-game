@@ -2,6 +2,7 @@ import "./App.css";
 import { useState } from "react";
 import LandingPage from "./components/LandingPage";
 import StartGame from "./components/StartGame";
+import EndGame from "./components/EndGame";
 import NavBar from "./components/Navbar";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
 
   const [gameMode, setGameMode] = useState(gameModes[0].value);
   const [hasGameStarted, setHasGameStarted] = useState(false);
+  const [hasGameBeenPlayed, setHasGameBeenPlayed] = useState(false);
   const [gameScore, setGameScore] = useState(0);
 
   let gameTitle = "";
@@ -27,10 +29,11 @@ function App() {
       break;
   }
 
-  return (
-    <>
-      <NavBar />
-      {!hasGameStarted ? (
+  function gamePageToRender() {
+    if (hasGameBeenPlayed) {
+      return <EndGame gameScore={gameScore} />;
+    } else if (!hasGameStarted) {
+      return (
         <LandingPage
           gameMode={gameMode}
           gameModes={gameModes}
@@ -38,13 +41,23 @@ function App() {
           setHasGameStarted={setHasGameStarted}
           gameTitle={gameTitle}
         />
-      ) : (
+      );
+    } else if (hasGameStarted) {
+      return (
         <StartGame
           gameMode={gameMode}
           gameTitle={gameTitle}
           setGameScore={setGameScore}
+          setHasGameBeenPlayed={setHasGameBeenPlayed}
         />
-      )}
+      );
+    }
+  }
+
+  return (
+    <>
+      <NavBar />
+      {gamePageToRender()}
     </>
   );
 }

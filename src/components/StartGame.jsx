@@ -1,6 +1,11 @@
 import { useEffect, useState, useRef } from "react";
 
-function StartGame({ gameMode, gameTitle, setGameScore }) {
+function StartGame({
+  gameMode,
+  gameTitle,
+  setGameScore,
+  setHasGameBeenPlayed,
+}) {
   const initialTimerRef = useRef(5);
   const currentTimerRef = useRef(initialTimerRef.current);
   const currentQuestionNumberRef = useRef(1);
@@ -81,6 +86,7 @@ function StartGame({ gameMode, gameTitle, setGameScore }) {
         currentTimerRef.current = initialTimerRef.current;
         currentQuestionNumberRef.current++;
         setGameScore(gamePoints.current);
+        checkHasGameEnded();
         if (currentQuestionNumberRef.current <= characters.length) {
           setHasMadeChoice(false);
           setCurrentCharacter(characters[currentQuestionNumberRef.current - 1]);
@@ -105,6 +111,12 @@ function StartGame({ gameMode, gameTitle, setGameScore }) {
     });
     if (isRightChoice.isCorrectOption) {
       gamePoints.current++;
+    }
+  }
+
+  function checkHasGameEnded() {
+    if (questionNumber === characters.length) {
+      setHasGameBeenPlayed(true);
     }
   }
 
