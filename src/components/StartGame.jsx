@@ -153,9 +153,11 @@ function StartGame({
         <h1 className="title is-2 has-text-white has-text-centered">
           {gameTitle}
         </h1>
-        <h4 className="is-size-4 has-text-white has-text-centered">
-          Player Name: {playerName}
-        </h4>
+        <div className="block">
+          <h4 className="is-size-4 has-text-white has-text-centered">
+            Player Name: {playerName}
+          </h4>
+        </div>
         <div
           className="block"
           style={{
