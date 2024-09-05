@@ -15,6 +15,7 @@ function App() {
 
   const [gameMode, setGameMode] = useState(gameModes[0].value);
   const [hasGameStarted, setHasGameStarted] = useState(false);
+  const [gameScore, setGameScore] = useState(0);
 
   let gameTitle = "";
   switch (gameMode) {
@@ -38,7 +39,11 @@ function App() {
           gameTitle={gameTitle}
         />
       ) : (
-        <StartGame gameMode={gameMode} gameTitle={gameTitle} />
+        <StartGame
+          gameMode={gameMode}
+          gameTitle={gameTitle}
+          setGameScore={setGameScore}
+        />
       )}
     </>
   );

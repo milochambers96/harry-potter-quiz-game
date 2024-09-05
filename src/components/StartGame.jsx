@@ -1,17 +1,18 @@
 import { useEffect, useState, useRef } from "react";
 
-function StartGame({ gameMode, gameTitle }) {
+function StartGame({ gameMode, gameTitle, setGameScore }) {
   const initialTimerRef = useRef(5);
   const currentTimerRef = useRef(initialTimerRef.current);
   const currentQuestionNumberRef = useRef(1);
   const responseData = useRef(null);
+  const gamePoints = useRef(0);
   const [characters, setCharacters] = useState([]);
   const [questionNumber, setQuestionNumber] = useState(
     currentQuestionNumberRef.current
   );
   const [currentCharacter, setCurrentCharacter] = useState({});
   const [timer, setTimer] = useState(currentTimerRef.current);
-  const [choices, setChoices] = useState([]);
+  const [choices, setChoices] = useState([{}]);
 
   const generatedNumbers = [];
 
@@ -48,11 +49,12 @@ function StartGame({ gameMode, gameTitle }) {
     generateRandomCharactersIdx(data, dataLength, numberOfCharacters);
   }
   function generateRandomOptions(correctOption, data, optionLength) {
-    const newOptions = [correctOption];
+    const newOptions = [{ name: correctOption, isCorrectOption: true }];
     for (let i = optionLength; i > 0; i--) {
-      newOptions.push(
-        data[Math.floor(Math.random() * (data.length - 1)) + 1].name
-      );
+      newOptions.push({
+        name: data[Math.floor(Math.random() * (data.length - 1)) + 1].name,
+        isCorrectOption: false,
+      });
     }
     return shuffleOptions(newOptions);
   }
@@ -77,7 +79,7 @@ function StartGame({ gameMode, gameTitle }) {
         clearInterval(intervalID);
         currentTimerRef.current = initialTimerRef.current;
         currentQuestionNumberRef.current++;
-
+        setGameScore(gamePoints.current);
         if (currentQuestionNumberRef.current <= characters.length) {
           setCurrentCharacter(characters[currentQuestionNumberRef.current - 1]);
           setQuestionNumber(currentQuestionNumberRef.current);
@@ -92,6 +94,15 @@ function StartGame({ gameMode, gameTitle }) {
         }
       }
     }, 1000);
+  }
+
+  function handleClick(e) {
+    const isRightChoice = choices.find((choice) => {
+      return choice.name === e.target.dataset.name;
+    });
+    if (isRightChoice.isCorrectOption) {
+      gamePoints.current++;
+    }
   }
 
   return (
@@ -139,8 +150,13 @@ function StartGame({ gameMode, gameTitle }) {
         <div style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
           {choices.map((choice, i) => {
             return (
-              <button key={i} className="button">
-                {choice}
+              <button
+                key={i}
+                className="button"
+                onClick={handleClick}
+                data-name={choice.name}
+              >
+                {choice.name} - {choice.isCorrectOption && "correct"}
               </button>
             );
           })}
