@@ -29,7 +29,10 @@ function StartGame({
     responseData.current = data;
     generateRandomCharactersIdx(data, data.length, 5);
     const selectedCharacters = generatedNumbers.map((index) => data[index]);
-    const correctAnswer = data[generatedNumbers[0]].name;
+    const correctAnswer =
+      gameMode === "hard" && data[generatedNumbers[0]].actor
+        ? data[generatedNumbers[0]].actor
+        : data[generatedNumbers[0]].name;
 
     const options = generateRandomOptions(
       correctAnswer,
@@ -58,8 +61,13 @@ function StartGame({
   function generateRandomOptions(correctOption, data, optionLength) {
     const newOptions = [{ name: correctOption, isCorrectOption: true }];
     for (let i = optionLength; i > 0; i--) {
+      const randNum = Math.floor(Math.random() * (data.length - 1)) + 1;
+      const gameName =
+        gameMode === "hard" && data[randNum].actor
+          ? data[randNum].actor
+          : data[randNum].name;
       newOptions.push({
-        name: data[Math.floor(Math.random() * (data.length - 1)) + 1].name,
+        name: gameName,
         isCorrectOption: false,
       });
     }
@@ -95,12 +103,13 @@ function StartGame({
           setHasMadeChoice(false);
           setCurrentCharacter(characters[currentQuestionNumberRef.current - 1]);
           setQuestionNumber(currentQuestionNumberRef.current);
+          const correctCharacterName =
+            gameMode === "hard" &&
+            characters[currentQuestionNumberRef.current - 1].actor
+              ? characters[currentQuestionNumberRef.current - 1].actor
+              : characters[currentQuestionNumberRef.current - 1].name;
           setChoices(
-            generateRandomOptions(
-              characters[currentQuestionNumberRef.current - 1].name,
-              responseData.current,
-              3
-            )
+            generateRandomOptions(correctCharacterName, responseData.current, 3)
           );
           setTimer(currentTimerRef.current);
         }

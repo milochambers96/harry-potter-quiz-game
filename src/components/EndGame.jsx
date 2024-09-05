@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import SelectInput from "./SelectInput";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 function EndGame({
   gameScore,
@@ -23,7 +23,7 @@ function EndGame({
     let highScores = JSON.parse(localStorage.getItem(gameMode));
     if (highScores && highScores.length < 5) {
       highScores.push(currentScore);
-    } else if (highScores.length >= 5) {
+    } else if (highScores && highScores.length >= 5) {
       const lowestScore = highScores.reduce(
         (min, score) => {
           min.score = Math.min(min.score, score.score);
