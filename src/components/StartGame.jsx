@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 
 function StartGame({
   gameMode,
@@ -186,7 +186,14 @@ function StartGame({
             src={currentCharacter.image}
           ></img>
         </div>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "16px",
+            justifyContent: "center",
+          }}
+        >
           {choices.map((choice, i) => {
             return (
               <button
