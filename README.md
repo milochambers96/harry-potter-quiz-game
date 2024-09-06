@@ -22,7 +22,7 @@ This project was created as part of a 48-hour hackathon undertaken in a driver-n
 
 The game features two modes: Classic Mode and Hard Mode. Classic Mode presents questions with multiple-choice answers where players identify the actor based on a list of names, while Hard Mode challenges players to select the correct actor based on images. The game includes a score system, highscore tracking, and a leaderboard.
 
-You can access the live game [here] ---> need to add link
+You can access the live game [here](https://harry-potter-quiz-game.netlify.app/)
 
 ### Brief
 
@@ -124,7 +124,7 @@ You can access the live game [here] ---> need to add link
 - Challenge: Both developers had only one week of React experience, which presented a learning curve.
 - Consideration: Highlights the challenge of adapting to a new framework quickly and the importance of leveraging available resources and documentation to overcome initial hurdles.
 
-## Potential Future Features 
+## Potential Future Features
 
 - Additional Game Modes: Expand the game by introducing new modes, such as a quiz where players match characters to their Hogwarts houses or test their knowledge on magical creatures.
 - Enhanced API Integration: Integrate more comprehensive APIs or additional data sources to provide richer content and enhance gameplay diversity.
