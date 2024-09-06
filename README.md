@@ -1,12 +1,5 @@
 # Harry Potter Quiz Game
 
-## Getting Starting
-
-1. Clone this repo
-2. Run `npm i`
-3. Run `npm run dev`
-4. Start contributing
-
 ### Contributors
 
 - [Lade Oshodi](https://github.com/ladeoshodi)
@@ -33,13 +26,31 @@ You can access the live game [here](https://harry-potter-quiz-game.netlify.app/)
 
 ### Features
 
-- Landing Page: Provides an introduction to the game, allows players to input their name, and choose between game modes.
-- Start Game Component: Renders the game interface based on user inputs and contains the core game logic.
-- End Game Component: Displays the final score, updates the highscore leaderboard, and provides options to play again or change game modes.
-- Leaderboard: Shows the top 5 scores for each game mode and allows players to reset scores.
-- Navigation: Users can navigate between the Home page and the Leaderboard using the NavBar component with React Router.
+- Landing Page: Provides an introduction to the game, and allows players to input their name, and choose between game modes.
 
-###### Maybe inclucde screenshots of the game pages
+  ![image](https://github.com/user-attachments/assets/cf2ea972-3d20-475b-a82c-ff1e9c9c91b7)
+
+  ![image](https://github.com/user-attachments/assets/3b0f0222-258e-4995-ac1f-0899b20738e0)
+
+
+- Start Game Component: Renders the game interface based on user inputs and contains the core game logic.
+
+  ![image](https://github.com/user-attachments/assets/ce32684c-6991-4ffd-a0fb-c66a5d5d4e33)
+
+  ![image](https://github.com/user-attachments/assets/230d1e25-e40c-49f6-baae-eb45dbcee5a3)
+
+
+- End Game Component: Displays the final score, updates the highscore leaderboard, and provides options to play again or change game modes.
+
+  ![image](https://github.com/user-attachments/assets/12a73ae2-a802-4edb-aed9-e052cec12f55)
+
+- Leaderboard: Shows the top 5 scores for each game mode and allows players to reset scores.
+
+  ![image](https://github.com/user-attachments/assets/973c560a-b7fc-4c34-aaca-e83609aa5d69)
+
+
+
+- Navigation: Users can navigate between the Home page and the Leaderboard using the NavBar component with React Router.
 
 ### Development Plan
 
@@ -55,7 +66,7 @@ You can access the live game [here](https://harry-potter-quiz-game.netlify.app/)
 - Gameplay: Follows many of the same principles of classic mode, but players guess the names of the actors who played the characters.
 - Leaderboard: Separate leaderboard for Hard Mode.
 
-### Key Features in Code
+## Key Features in Code
 
 ### Start Game Component
 
@@ -65,22 +76,115 @@ You can access the live game [here](https://harry-potter-quiz-game.netlify.app/)
 - Purpose: This function recursively generates a list of unique random indices to select characters from the API data. It ensures that a specified number of characters are chosen, each with an image, and avoids duplicating indices.
 - Mechanism: The function uses recursion to keep generating random indices until the required number of unique indices is collected. It verifies each index for uniqueness and ensures that each selected character has an image.
 
-## add code snapshot
+```javascript
+function generateRandomCharactersIdx(data, dataLength, numberOfCharacters) {
+  if (generatedNumbers.length === numberOfCharacters) return;
+  let randomNumber = Math.floor(Math.random() * dataLength);
+  if (!generatedNumbers.includes(randomNumber)) {
+    if (data[randomNumber].image) {
+      generatedNumbers.push(randomNumber);
+    }
+  }
+  generateRandomCharactersIdx(data, dataLength, numberOfCharacters);
+}
+```
 
 #### Option Generation and Shuffling:
 
 - Functions: generateRandomOptions and shuffleOptions
 - Purpose: These functions work together to create and randomise the answer choices for each quiz question.
 - Mechanism:
-- - generateRandomOptions: Creates a list of options for the quiz question. It includes the correct answer and several incorrect options. It randomises the selection of names from the API data based on the game mode (either the character's name or actor's name).
-- - shuffleOptions: Shuffles the generated options using the Fisher-Yates algorithm. This ensures that the correct answer is not always in the same position, adding variety and challenge to the game.
+  - generateRandomOptions: Creates a list of options for the quiz question. It includes the correct answer and several incorrect options. It randomises the selection of names from the API data based on the game mode (either the character's name or actor's name).
+  - shuffleOptions: Shuffles the generated options using the Fisher-Yates algorithm. This ensures that the correct answer is not always in the same position, adding variety and challenge to the game.
 
-## add code snapshot
+```javascript
+function generateRandomOptions(correctOption, data, optionLength) {
+  const newOptions = [{ name: correctOption, isCorrectOption: true }];
+  for (let i = optionLength; i > 0; i--) {
+    const randNum = Math.floor(Math.random() * (data.length - 1)) + 1;
+    const gameName =
+      gameMode === "hard" && data[randNum].actor
+        ? data[randNum].actor
+        : data[randNum].name;
+    newOptions.push({
+      name: gameName,
+      isCorrectOption: false,
+    });
+  }
+  return shuffleOptions(newOptions);
+}
+
+function shuffleOptions(options) {
+  for (let i = options.length - 1; i > 0; i--) {
+    const rI = Math.floor(Math.random() * (i + 1));
+    [options[i], options[rI]] = [options[rI], options[i]];
+  }
+  return options;
+}
+```
 
 #### Dynamic Timer and Question Handling:
 
-- Mechanism:useRef and setInterval: The component uses useRef to manage mutable values for the timer and question number. The setInterval function updates the timer every second, automatically progressing to the next question when the timer reaches zero.
-- Purpose: This mechanism ensures smooth and consistent game progression, allowing the game to handle time-sensitive interactions effectively and keep the gameplay engaging.
+- Mechanism: The StartGame component utilises multiple useEffect hooks to handle time-sensitive game interactions and question progression. A setInterval function manages the countdown timer for each question, while a secondary useEffect ensures the game progresses to the next question or ends when the timer hits zero.
+
+  - Timer Handling:
+
+```javascript
+useEffect(() => {
+  intervalIDRef.current = setInterval(() => {
+    setTimer((timer) => timer - 1);
+  }, 1000);
+
+  return () => {
+    clearInterval(intervalIDRef.current);
+  };
+}, [currentCharacter]);
+```
+
+This ensures the timer decreases by 1 every second while the current character is being displayed. The timer is reset for each new question, keeping gameplay paced and engaging.
+
+- Automatic Progression to Next Question:
+
+```javascript
+useEffect(() => {
+  if (timer === 0) {
+    clearInterval(intervalIDRef.current);
+    if (questionNumber === characters.length) {
+      setGameScore({
+        score: gamePoints.current,
+        totalQuestions: characters.length,
+      });
+      setHasGameBeenPlayed(true);
+    } else {
+      setNextQuestion();
+    }
+  }
+}, [timer]);
+```
+
+When the timer reaches zero, this hook automatically checks if all questions have been answered. If not, it proceeds to the next question by calling the setNextQuestion function.
+
+- Next Question Setup:
+
+```javascript
+function setNextQuestion() {
+  setTimer(initialTimer);
+  setQuestionNumber((questionNumber) => questionNumber + 1);
+  setCurrentCharacter(characters[questionNumber]);
+  setHasMadeChoice(false);
+  const correctCharacterName =
+    gameMode === "hard" && characters[questionNumber].actor
+      ? characters[questionNumber].actor
+      : characters[questionNumber].name;
+  setChoices(
+    generateRandomOptions(correctCharacterName, responseData.current, 3)
+  );
+}
+```
+
+This function resets the timer and prepares the next character and answer options, ensuring smooth progression between questions.
+
+- Purpose: Together, these mechanisms ensure a seamless gameplay experience where players are automatically moved to the next question when time runs out, maintaining game flow and keeping the pace engaging.
 
 ### End Game Component
 
@@ -89,18 +193,64 @@ You can access the live game [here](https://harry-potter-quiz-game.netlify.app/)
 - Function: setHighScore
 - Purpose: Updates the local storage with the current game's high scores. It ensures that the leaderboard retains the top scores based on the current game mode.
 - Mechanism:
-- - The function retrieves the existing high scores from local storage for the current game mode.
-- - It then compares the current score with the existing high scores and updates the leaderboard accordingly.
-- - If the number of high scores is less than 5, the current score is added to the list.
-- - If there are already 5 high scores, the function replaces the lowest score with the current score if it is higher.
 
-#### High Score Retrieval and Sorting:
+  - The function retrieves the existing high scores from local storage for the current game mode.
+  - It then compares the current score with the existing high scores and updates the leaderboard accordingly.
+  - If the number of high scores is less than 5, the current score is added to the list.
+  - If there are already 5 high scores, the function replaces the lowest score with the current score if it is higher.
 
-- Functions: useEffect Hooks to render scores
-- Purpose: Retrieves and sorts high scores for both game modes from local storage when the component mounts.
+```javascript
+function setHighScore() {
+  const currentScore = { name: playerName, score: gameScore.score };
+  let highScores = JSON.parse(localStorage.getItem(gameMode));
+
+  if (highScores && highScores.length < 5) {
+    highScores.push(currentScore);
+  } else if (highScores && highScores.length >= 5) {
+    const lowestScore = highScores.reduce(
+      (min, score) => {
+        min.score = Math.min(min.score, score.score);
+        return min;
+      },
+      { score: Infinity }
+    );
+
+    if (currentScore.score > lowestScore.score) {
+      const lowestScoreIndex = highScores.findIndex(
+        (highScores) => lowestScore.score === highScores.score
+      );
+      highScores.splice(lowestScoreIndex, 1, currentScore);
+    }
+  } else {
+    highScores = [currentScore];
+  }
+
+  localStorage.setItem(gameMode, JSON.stringify(highScores));
+}
+```
+
+### Leaderboard Component
+
+#### Leaderboard Score Management:
+
+- Functions: useState, useEffect
+- Purpose: Manages and renders the high scores for Classic Mode and Hard Mode by retrieving data from local storage, sorting it, and updating the state accordingly.
 - Mechanism:
-- - Classic Mode: Retrieves scores, sorts them in descending order, and updates the state.
-- - Hard Mode: Similarly, retrieves and sorts scores, ensuring the leaderboard displays the top scores correctly.
+
+  - High scores are fetched for both game modes using useEffect, with scores retrieved from local storage and sorted in descending order by score.
+  - The Leaderboard component handles the display of these scores, ensuring the correct scores are shown for each mode. The handleClick function allows users to reset scores, clearing local storage and updating the UI.
+
+  ```javascript
+  useEffect(() => {
+    function fetchHighScores(mode) {
+      const scores = JSON.parse(localStorage.getItem(mode));
+      return scores ? scores.sort((a, b) => b.score - a.score) : [];
+    }
+
+    setClassicHighScores(fetchHighScores("classic"));
+    setHardHighScore(fetchHighScores("hard"));
+  }, []);
+  ```
 
 ## Challenges and Considerations
 
@@ -122,9 +272,12 @@ You can access the live game [here](https://harry-potter-quiz-game.netlify.app/)
 ### Framework Adaptation:
 
 - Challenge: Both developers had only one week of React experience, which presented a learning curve.
-- Consideration: Highlights the challenge of adapting to a new framework quickly and the importance of leveraging available resources and documentation to overcome initial hurdles.
+- Consideration: Highlights the challenge of quickly adapting to a new framework and the importance of leveraging available resources and documentation to overcome initial hurdles.
 
 ## Potential Future Features
 
-- Additional Game Modes: Expand the game by introducing new modes, such as a quiz where players match characters to their Hogwarts houses or test their knowledge on magical creatures.
+- Error Handling: Create an error page for incorrect routes and handle API 404 errors to improve user experience and prevent crashes or undefined states.
+- Mobile Navigation: Develop an interactive hamburger menu for menu items on mobile devices (for screens smaller than 1024px), enhancing usability and responsiveness on smaller screens.
+- Additional Game Modes: Expand the game by introducing new modes, such as a quiz where players match characters to their Hogwarts houses.
 - Enhanced API Integration: Integrate more comprehensive APIs or additional data sources to provide richer content and enhance gameplay diversity.
+
