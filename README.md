@@ -2,8 +2,9 @@
 
 ### Contributors
 
-- [Lade Oshodi](https://github.com/ladeoshodi)
 - [Milo Chambers](https://github.com/milochambers96)
+- [Lade Oshodi](https://github.com/ladeoshodi)
+
 
 ### Attributes
 
