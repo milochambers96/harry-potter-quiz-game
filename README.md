@@ -1,10 +1,13 @@
-# Harry Potter Quiz Game
+<div align="right">
+<img src="https://github.com/user-attachments/assets/d8593240-16da-40ff-bdaa-cbb001fed020" alt="GA Logo" width="80" height="auto" />
+</div>
+
+# Harry Potter Quiz Game - 48h Hackathon
 
 ### Contributors
 
 - [Milo Chambers](https://github.com/milochambers96)
 - [Lade Oshodi](https://github.com/ladeoshodi)
-
 
 ### Attributes
 
@@ -12,8 +15,9 @@ Harry Potter Characters API courtesy of [HP-API](https://hp-api.herokuapp.com/)
 
 ## Overview
 
-This project was created as part of a 48-hour hackathon undertaken in a driver-navigator format. The goal was to build a Harry Potter Quiz Game using React, with a focus on interactive gameplay and user experience. The project employs React for the frontend and uses Bulma for styling, alongside React Router for navigation.
+This was the second project of the software engineering bootcamp at General Assembly, London. The assignment was to build a multi-page React application that consumes public APIs, completed within a 48-hour hackathon in a pair-programming format.
 
+We chose to create a Harry Potter Quiz Game with a focus on interactive gameplay and user experience. The project employs React for the frontend and uses Bulma for styling, alongside React Router for navigation.
 The game features two modes: Classic Mode and Hard Mode. Classic Mode presents questions with multiple-choice answers where players identify the actor based on a list of names, while Hard Mode challenges players to select the correct actor based on images. The game includes a score system, highscore tracking, and a leaderboard.
 
 You can access the live game [here](https://harry-potter-quiz-game.netlify.app/)
